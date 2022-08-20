@@ -12,17 +12,17 @@ class Cylinder:
         self.height = None
         self.orientation = None
 
-    def getData(self, features, idxNo):
-        features[idxNo]
+    # def getData(self, features, idxNo):
+    #     features[idxNo]
 
 
-def get_circuit(content):
+def get_data(content):
     """
-    :return: Search for the circuit (if any) in content and return it.
+    :return: Search for the data (if any) in content and return it.
     """
 
     # initiating parameter containing info about circuit
-    circuit_start = circuit_end = False
+    data_start = data_end = False
     start_index = end_index = None
 
     # loop to traverse through content
@@ -32,13 +32,13 @@ def get_circuit(content):
         # Finding start of circuit
         if tokens and tokens[0] == FEATURE_START:
             # Giving error if we had already found circuit start command before
-            if circuit_start is True:
+            if data_start is True:
                 sys.exit(f"ERROR: More then one {FEATURE_START} found")
             else:
                 # checking if there is any unwanted stuff after circuit start command
                 if len(tokens) > 1 and tokens[1][0] != '#':
                     sys.exit(f"ERROR: Invalid text after {FEATURE_START} in line {line_index + 1}")
-                circuit_start = True
+                data_start = True
                 start_index = line_index
 
         # Finding end of circuit
@@ -46,20 +46,20 @@ def get_circuit(content):
             # Giving error if we had already found circuit end command before
             if len(tokens) > 1 and tokens[1][0] != '#':
                 sys.exit(f"ERROR: Invalid text after {CIRCUIT_END} in line {line_index + 1}")
-            circuit_end = True
+            data_end = True
             end_index = line_index
 
 
 
-    # Exiting program if no circuit fond or if circuit block is not valid
-    if circuit_start is False:
-        sys.exit("Circuit start not Found")
+    # Exiting program if no data fond or if circuit block is not valid
+    if data_start is False:
+        sys.exit("Data start not Found")
 
-    if circuit_end is False:
-        sys.exit("ERROR: Circuit start found but end don't exist")
+    if data_end is False:
+        sys.exit("ERROR: Data start found but end don't exist")
 
     if start_index > end_index:
-        sys.exit(f"ERROR: Invalid circuit: {FEATURE_START} came after {CIRCUIT_END}")
+        sys.exit(f"ERROR: Invalid Data: {FEATURE_START} came after {CIRCUIT_END}")
 
     # returning the circuit portion
     return content[start_index+1:end_index]
@@ -86,7 +86,7 @@ def helper(line, i, j):
 
 
 f = open('Cylinder.STEP')
-lines = get_circuit(f.readlines())
+lines = get_data(f.readlines())
 dict = {}
 for line in lines:
     feature = line.replace("'", "").replace(',','').split()
